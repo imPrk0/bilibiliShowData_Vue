@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>视频状态监视页 by Prk</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    </head>
+    <body>
+        <div id="app">
+            <ul>
+                <li>播放量：{{ data.view }}</li>
+                <li>点赞量：{{ data.like }}</li>
+                <li>投币量：{{ data.coin }}</li>
+                <li>收藏量：{{ data.favorite }}</li>
+                <li>转发量：{{ data.share }}</li>
+                <li>弹幕量：{{ data.danmaku }}</li>
+            </ul>
+            <button @click="rData()">点我刷新视频数据</button><br /><br />
+            <button @click="jumpToVideo()">点我跳转到该视频</button>
+        </div>
+        <script type="text/javascript">
+            new Vue ({
+                el: "#app",
+                data() {
+                    return {
+                        data: { "view": "获取中...", "like": "获取中...", "danmaku": "获取中...", "reply": "获取中...", "favorite": "获取中...", "coin": "获取中...", "share": "获取中..." },
+                        aid: '933842858',
+                        bvid: 'BV1QT4y1R7kT'
+                    }
+                },
+                methods: {
+                    rData() {
+                        this.data = { "view": "获取中...", "like": "获取中...", "danmaku": "获取中...", "reply": "获取中...", "favorite": "获取中...", "coin": "获取中...", "share": "获取中..." },
+                        fetch("https://www.cprk.cc/365/?json")
+                            .then(api => api.json())
+                            .then(json => { this.data = json.data })
+                    },
+                    jumpToVideo() {
+                        window.open("https://www.bilibili.com/video/" + this.bvid)
+                    }
+                },
+                created() {
+                    // fetch("https://api.bilibili.com/archive_stat/stat?aid=" + this.aid) 该API存在跨域问题
+                    fetch("https://www.cprk.cc/365/?json")
+                        .then(api => api.json())
+                        .then(json => { this.data = json.data })
+                }
+            })
+        </script>
+    </body>
+</html>
